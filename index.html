@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plano de Vida — Léo Memória</title>
+<style>
+  :root{
+    --bg:#0B1220; --card:#121B2E; --card2:#0F1728; --line:rgba(255,255,255,.08);
+    --tx:#E8ECF4; --mut:#93A0B4; --gold:#D4AF37; --orange:#F97316; --teal:#14B8A6;
+    --pink:#EC4899; --green:#22C55E; --blue:#3B82F6; --red:#EF4444;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--tx);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.5;padding-bottom:60px}
+  header{padding:28px 22px 14px;max-width:1100px;margin:0 auto}
+  .kicker{color:var(--gold);font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:700}
+  h1{font-size:clamp(22px,4vw,32px);margin:6px 0 2px}
+  .sub{color:var(--mut);font-size:14px}
+  .countdown{display:inline-flex;align-items:center;gap:10px;margin-top:14px;background:linear-gradient(90deg,rgba(212,175,55,.16),rgba(249,115,22,.14));border:1px solid rgba(212,175,55,.35);border-radius:14px;padding:10px 16px;font-weight:600}
+  .countdown b{font-size:22px;color:var(--gold)}
+  .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .tag{font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;border:1px solid var(--line);background:var(--card)}
+  nav.tabs{position:sticky;top:0;z-index:5;display:flex;gap:6px;overflow-x:auto;padding:12px 22px;max-width:1100px;margin:6px auto 0;background:rgba(11,18,32,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+  nav.tabs button{flex:0 0 auto;background:var(--card);color:var(--mut);border:1px solid var(--line);border-radius:10px;padding:8px 14px;font-size:14px;font-weight:600;cursor:pointer}
+  nav.tabs button.active{background:var(--gold);color:#0B1220;border-color:var(--gold)}
+  main{max-width:1100px;margin:0 auto;padding:18px 22px}
+  section.tab{display:none}
+  section.tab.active{display:block;animation:fade .25s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+  h2{font-size:18px;margin:6px 0 12px}
+  h2 span{color:var(--mut);font-weight:400;font-size:13px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
+  .card h3{font-size:15px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+  .dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+  ul.tl{list-style:none}
+  ul.tl li{display:flex;gap:12px;padding:9px 0;border-bottom:1px dashed var(--line);align-items:flex-start}
+  ul.tl li:last-child{border-bottom:none}
+  .when{flex:0 0 92px;color:var(--gold);font-weight:700;font-size:12.5px;padding-top:2px}
+  .what{flex:1;font-size:14px}
+  .what small{display:block;color:var(--mut);font-size:12px;margin-top:2px}
+  .pill{align-self:center;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap}
+  .p-tri{background:rgba(249,115,22,.15);color:var(--orange)}
+  .p-red{background:rgba(236,72,153,.15);color:var(--pink)}
+  .p-adv{background:rgba(212,175,55,.15);color:var(--gold)}
+  .p-fin{background:rgba(34,197,94,.15);color:var(--green)}
+  .p-casa{background:rgba(59,130,246,.15);color:var(--blue)}
+  .p-703{background:rgba(20,184,166,.15);color:var(--teal)}
+  .callout{border-radius:14px;padding:12px 16px;font-size:13.5px;margin:0 0 14px;border:1px solid}
+  .c-info{background:rgba(59,130,246,.12);border-color:rgba(59,130,246,.4)}
+  .c-warn{background:rgba(249,115,22,.12);border-color:rgba(249,115,22,.4)}
+  .c-ok{background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.4)}
+  .callout b{display:block;margin-bottom:2px}
+  table{width:100%;border-collapse:collapse;font-size:13.5px}
+  th{text-align:left;color:var(--mut);font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;padding:8px 10px;border-bottom:1px solid var(--line)}
+  td{padding:9px 10px;border-bottom:1px dashed var(--line);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  .mk-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+  .mk-head h3{font-size:15px}
+  .mk-head small{color:var(--mut);font-size:12px}
+  .mk ul{list-style:none;font-size:13.5px}
+  .mk li{padding:5px 0 5px 18px;position:relative;color:#CBD5E1}
+  .mk li::before{content:"▸";position:absolute;left:2px;color:var(--gold)}
+  .mk li b{color:var(--tx)}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--mut);margin-top:8px}
+  .legend i{width:18px;height:3px;border-radius:2px;display:inline-block;margin-right:6px;vertical-align:middle}
+  footer{max-width:1100px;margin:26px auto 0;padding:0 22px;color:var(--mut);font-size:12px}
+  .done-btn{flex:0 0 auto;align-self:center;background:rgba(34,197,94,.12);color:var(--green);border:1px solid rgba(34,197,94,.4);border-radius:8px;padding:5px 12px;font-size:12px;font-weight:700;cursor:pointer}
+  .done-btn:hover{background:rgba(34,197,94,.25)}
+  .task.done .what{text-decoration:line-through;opacity:.45}
+  .task.done .done-btn{background:rgba(34,197,94,.85);color:#0B1220;border-color:var(--green)}
+  .task.done .done-btn::before{content:"✓ "}
+  svg.chart{width:100%;height:auto;display:block}
+  @media (max-width:640px){ .when{flex-basis:74px} .pill{display:none} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="kicker">Dashboard pessoal</div>
+  <h1>Plano de Vida — Léo Memória</h1>
+  <div class="sub">Terça-feira, 20 de outubro de 2026 · gerado pelo Guzz</div>
+  <div class="countdown">⏳ <b id="days">180</b> dias para o IRONMAN 70.3 Brasília · 18/04/2027</div>
+  <div class="tags">
+    <span class="tag">⚖️ Advocacia</span><span class="tag">🏊 Triatlo</span><span class="tag">📱 Instagram</span>
+    <span class="tag">💰 Finanças</span><span class="tag">🏠 Casa</span><span class="tag">🎬 Memória 70.3</span>
+  </div>
+</header>
+
+<nav class="tabs" id="tabs">
+  <button data-tab="hoje" class="active">📌 Hoje</button>
+  <button data-tab="semana">🗓️ Próximos 7 dias</button>
+  <button data-tab="marcos">🎯 Marcos &amp; Metas</button>
+  <button data-tab="rotinas">🔁 Rotinas fixas</button>
+  <button data-tab="gut">📈 Gut Training</button>
+  <button data-tab="treino">🏊 Semana de treino</button>
+  <button data-tab="creditos">💳 Créditos</button>
+</nav>
+
+<main>
+
+<section class="tab active" id="hoje">
+  <div class="callout c-info"><b>Agenda livre no Google Calendar hoje</b>Nenhum evento nos seus calendários hoje — a agenda da semana só tem a Mariani, quinta às 9h (Luciana).</div>
+  <h2>Compromissos e pendências <span>· terça, 20/10</span></h2>
+  <div class="card" style="margin-bottom:14px">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px">
+      <h3 style="margin:0">✅ Progresso do dia</h3>
+      <span id="progTxt" style="color:var(--mut);font-size:13px">0 de 7 concluídas</span>
+    </div>
+    <div style="background:rgba(255,255,255,.07);border-radius:999px;height:10px;overflow:hidden">
+      <div id="progBar" style="height:100%;width:0%;border-radius:999px;background:linear-gradient(90deg,var(--gold),var(--orange));transition:width .3s"></div>
+    </div>
+  </div>
+  <div class="card">
+    <ul class="tl" id="taskList">
+      <li class="task"><span class="when">Hoje</span><span class="what">Corrida leve 50' Z1–Z2 (8,2 km) — 1º treino da escala nova<small>grama ou terra batida, ou esteira · se após 17h, sem gel com cafeína</small></span><span class="pill p-tri">Triatlo</span><button class="done-btn" data-id="t1">Concluído</button></li>
+      <li class="task"><span class="when">Hoje</span><span class="what">Me passar as métricas 24h do Ep. 1<small>visualizações/curtidas no app (API do @memoriatri indisponível) — eu registro na planilha</small></span><span class="pill p-703">70.3</span><button class="done-btn" data-id="t2">Concluído</button></li>
+      <li class="task"><span class="when">Hoje</span><span class="what">Gravar o reel da Semana 1 (Insta Jurídico)<small>publicação é amanhã, quarta 21/10 — tema e roteiro já enviados</small></span><span class="pill p-red">Redes</span><button class="done-btn" data-id="t3">Concluído</button></li>
+      <li class="task"><span class="when">20–25/10</span><span class="what">Filmar os 7 clipes reais da S2 do 70.3<small>Ep. 2 (27/10) + carrossel (23/10) já redigidos e com artes prontas</small></span><span class="pill p-703">70.3</span><button class="done-btn" data-id="t4">Concluído</button></li>
+      <li class="task"><span class="when">Quando puder</span><span class="what">Decisões pendentes na Ação 1<small>julgado da parte contrária · classificação de docs no PJe · documento fora do protocolo</small></span><span class="pill p-adv">Ação 1</span><button class="done-btn" data-id="t5">Concluído</button></li>
+      <li class="task"><span class="when">Até 31/10</span><span class="what">Sessão-chave F0<small>bike 2h30–3h a 60–65 g/h + corrida 30–40 min · domingo tem bike de 2h — estender ou encaixar</small></span><span class="pill p-tri">Triatlo</span><button class="done-btn" data-id="t6">Concluído</button></li>
+      <li class="task"><span class="when">Se combinado</span><span class="what">2ª story-enquete de terça<small>a 1ª foi postada hoje ao meio-dia ✓ — templates prontos na pasta "Stories - Enquetes"</small></span><span class="pill p-red">Redes</span><button class="done-btn" data-id="t7">Concluído</button></li>
+    </ul>
+    <div style="margin-top:12px;text-align:right"><button id="resetTasks" style="background:none;border:1px solid var(--line);color:var(--mut);border-radius:8px;padding:5px 12px;font-size:12px;cursor:pointer">↺ Resetar o dia</button></div>
+  </div>
+  <div class="callout c-ok" style="margin-top:14px"><b>Já resolvido hoje</b>Story-enquete postada (12h) · apelação da Ação 2 revisada por você e estilo registrado · Ep. 1 estreou ontem à noite.</div>
+</section>
+
+<section class="tab" id="semana">
+  <h2>Próximos 7 dias <span>· 20/10 a 25/10</span></h2>
+  <div class="card">
+    <table>
+      <tr><th>Data</th><th>Compromisso</th><th>Origem</th></tr>
+      <tr><td><b>Ter 20/10</b></td><td>Corrida leve 50' (1º treino da escala) · métricas 24h do Ep. 1 · gravar reel S1 · story-enquete ✓</td><td><span class="pill p-tri">Triatlo</span></td></tr>
+      <tr><td><b>Qua 21/10</b></td><td>Publicar o reel da Semana 1 (manual) · bike intervalada 2h (116 TSS)</td><td><span class="pill p-red">Redes</span></td></tr>
+      <tr><td><b>Qui 22/10 · 9h</b></td><td>Mariani (agenda da Luciana) · corrida de tiros 1:06 (9,7 km)</td><td><span class="pill p-casa">Casa</span></td></tr>
+      <tr><td><b>Sex 23/10</b></td><td>Carrossel do 70.3 (S2) · bike Z2 1:40 (77 TSS)</td><td><span class="pill p-703">70.3</span></td></tr>
+      <tr><td><b>Sáb 24/10</b></td><td>Natação 40' + corrida 54' · carrossel/reel de sábado da Semana 1</td><td><span class="pill p-tri">Triatlo</span></td></tr>
+      <tr><td><b>Dom 25/10 · 19h</b></td><td>Bike longa 2h + transição 30' · log da semana → veredito AVANÇAR / REPETIR / RECUAR</td><td><span class="pill p-tri">Triatlo</span></td></tr>
+      <tr><td><b>Dom 25/10 · 20h</b></td><td>Métricas semanais das duas séries</td><td><span class="pill p-red">Redes</span></td></tr>
+    </table>
+  </div>
+</section>
+
+<section class="tab" id="marcos">
+  <h2>Marcos &amp; Metas <span>· os 6 projetos</span></h2>
+  <div class="grid">
+    <div class="card mk">
+      <div class="mk-head"><h3>⚖️ Contencioso civil — Ação 1</h3><small>plano de saúde · reajustes</small></div>
+      <ul>
+        <li><b>23/10</b> — decisão da gratuidade + tutela</li>
+        <li>Corrigir <b>classificação de 2 documentos</b> no PJe</li>
+        <li>Avaliar <b>emenda</b> p/ documento fora do protocolo</li>
+        <li>Decidir uso de <b>julgado favorável à parte contrária</b></li>
+      </ul>
+    </div>
+    <div class="card mk">
+      <div class="mk-head"><h3>🏊 Triatlo — Gut training</h3><small>Ironman 70.3 · 18/04/2027</small></div>
+      <ul>
+        <li><b>31/10</b> — sessão-chave da Fase 0 (bike 2h30–3h a 60–65 g/h + corrida)</li>
+        <li><b>01/11 · 7h</b> — Simulado de Triatlon + início da Fase 1 (60 g/h)</li>
+        <li><b>01/11</b> — teste de 70 g/h na 1ª bike longa, se a sessão-chave sair limpa</li>
+        <li><b>30/11</b> — fim da Fase 1</li>
+      </ul>
+    </div>
+    <div class="card mk">
+      <div class="mk-head"><h3>📱 Insta Jurídico</h3><small>F1 Fundação · até 17/11</small></div>
+      <ul>
+        <li><b>Post 1 publicado ✓</b> (19/10) · story-enquete de hoje postada ✓</li>
+        <li><b>Qua 21/10</b> — reel da Semana 1 (gravar hoje!)</li>
+        <li><b>17/11 · 20h</b> — checkpoint de 30 dias</li>
+        <li>Meta do ciclo: 500–1.000 seguidores (baseline: 118)</li>
+      </ul>
+    </div>
+    <div class="card mk">
+      <div class="mk-head"><h3>🎬 Memória 70.3</h3><small>@memoriatri</small></div>
+      <ul>
+        <li><b>Ep. 1 "O Anúncio" PUBLICADO ✓</b> — instagram.com/reel/DesE-aRpeGc (19/10)</li>
+        <li>Personagem <b>aprovado</b> (anime-film) · Ep. 2 pronto p/ edição (estreia 27/10)</li>
+        <li>Você filma os 7 clipes reais da S2 até 25/10</li>
+        <li>Cadência: reel terça + carrossel sexta</li>
+      </ul>
+    </div>
+    <div class="card mk">
+      <div class="mk-head"><h3>💰 Finanças</h3><small>plano nov/26 – dez/29</small></div>
+      <ul>
+        <li>Honorários de <b>R$ 3.500 lançados ✓</b> — equilíbrio de out/26 SUPERADO (+R$ 736)</li>
+        <li><b>31/10 · 21h</b> — fechamento de outubro (Lazer R$ 880,18 = viagem pontual, evento único)</li>
+        <li>Fatura Nubank de nov: pagar <b>integral</b> (regra de ouro)</li>
+        <li>Equilíbrio nov/26–mai/27: <b>R$ 3.764/mês</b> · amigos em nov: R$ 1.400</li>
+      </ul>
+    </div>
+    <div class="card mk">
+      <div class="mk-head"><h3>⚖️ Contencioso civil — Ação 2</h3><small>reintegração de posse · apelação</small></div>
+      <ul>
+        <li>Minuta entregue (19 págs) · <b>revisada por você hoje ✓</b></li>
+        <li>Estilo de peças registrado p/ próximas</li>
+        <li>Tese de tempestividade pronta</li>
+        <li>Pendente: transcrição de vídeos de prova</li>
+      </ul>
+    </div>
+    <div class="card mk">
+      <div class="mk-head"><h3>🏠 Casa &amp; Família</h3><small>agenda da Luciana</small></div>
+      <ul>
+        <li><b>22/10 · 9h</b> — Mariani</li>
+        <li><b>10/11</b> — Boleto Renner · <b>12/11</b> — Pedir remédios Yantra</li>
+        <li>Creche da Bia: R$ 2.537,64/mês (líquido R$ 537,64)</li>
+        <li>Feriados à frente: 02/11 · 15/11 · 20/11 (prazos não correm — CPC art. 219)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="tab" id="rotinas">
+  <h2>Rotinas fixas <span>· o motor da semana</span></h2>
+  <div class="card">
+    <table>
+      <tr><th>Quando</th><th>Ritual</th><th>Como funciona</th></tr>
+      <tr><td><b>Seg · 20h</b></td><td>Plano de suplementação</td><td>Você cola a escala da assessoria; eu devolvo g/h, ml/h, sódio e timing treino a treino</td></tr>
+      <tr><td><b>Seg · 20h</b></td><td>Planejamento semanal das redes</td><td>Eu preparo material, legendas e status nas planilhas; você posta e me avisa</td></tr>
+      <tr><td><b>Dom · 19h</b></td><td>Log da semana</td><td>Você cola o log; eu respondo o veredito AVANÇAR / REPETIR / RECUAR + meta da semana</td></tr>
+      <tr><td><b>Dom · 20h</b></td><td>Métricas das redes</td><td>KPIs das duas séries registrados nas planilhas</td></tr>
+      <tr><td><b>Dia 1º · 20h</b></td><td>Rotina mensal do plano financeiro</td><td>Fechamento do mês anterior + virada do seletor na planilha</td></tr>
+      <tr><td><b>5/jan·abr·jul·out</b></td><td>Revisão trimestral</td><td>Plano financeiro — ajustes só com sua aprovação</td></tr>
+    </table>
+  </div>
+</section>
+
+<section class="tab" id="gut">
+  <div class="callout c-warn"><b>Prazo: 31/10</b>A sessão-chave da Fase 0 precisa acontecer até lá. Saiu limpa (GI ≤ 2/10), você entra na Fase 1 já testando 70 g/h.</div>
+  <h2>Meta de CHO/h por fase <span>· gut training</span></h2>
+  <div class="card">
+    <svg class="chart" viewBox="0 0 620 270" role="img" aria-label="Gráfico de CHO/h por fase">
+      <g font-size="11" fill="#93A0B4">
+        <text x="46" y="234" text-anchor="end">0</text>
+        <text x="46" y="184" text-anchor="end">30</text>
+        <text x="46" y="134" text-anchor="end">60</text>
+        <text x="46" y="84" text-anchor="end">90</text>
+        <text x="46" y="34" text-anchor="end">120</text>
+      </g>
+      <g stroke="rgba(255,255,255,.08)"><line x1="56" y1="230" x2="600" y2="230"/><line x1="56" y1="180" x2="600" y2="180"/><line x1="56" y1="130" x2="600" y2="130"/><line x1="56" y1="80" x2="600" y2="80"/><line x1="56" y1="30" x2="600" y2="30"/></g>
+      <line x1="56" y1="124" x2="600" y2="124" stroke="#14B8A6" stroke-width="2" stroke-dasharray="6 5" opacity=".8"/>
+      <polyline points="60,140 160,130 260,92 360,55 460,92 560,92" fill="none" stroke="#D4AF37" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+      <g fill="#D4AF37">
+        <circle cx="60" cy="140" r="4.5"/><circle cx="160" cy="130" r="4.5"/><circle cx="260" cy="92" r="4.5"/><circle cx="360" cy="55" r="4.5"/><circle cx="460" cy="92" r="4.5"/><circle cx="560" cy="92" r="4.5"/>
+      </g>
+      <g font-size="11" fill="#E8ECF4" font-weight="600">
+        <text x="60" y="128" text-anchor="middle">53,8</text>
+        <text x="160" y="118" text-anchor="middle">60</text>
+        <text x="260" y="80" text-anchor="middle">82,5</text>
+        <text x="360" y="43" text-anchor="middle">105</text>
+        <text x="460" y="80" text-anchor="middle">82,5</text>
+        <text x="560" y="80" text-anchor="middle">82,5</text>
+      </g>
+      <g font-size="11" fill="#93A0B4" text-anchor="middle">
+        <text x="60" y="252">F0 · out</text><text x="160" y="252">F1 · nov</text><text x="260" y="252">F2 · dez-jan</text><text x="360" y="252">F3 · fev-mar</text><text x="460" y="252">F4 · abr</text><text x="560" y="252">Prova 18/04</text>
+      </g>
+    </svg>
+    <div class="legend">
+      <span><i style="background:#D4AF37"></i>Meta de CHO/h por fase</span>
+      <span><i style="background:#14B8A6"></i>Seu melhor registro (bike do GP: 63,6 g/h)</span>
+    </div>
+    <p style="color:var(--mut);font-size:12.5px;margin-top:10px">F0 = sua média real no GP Triatlon (53,8 g/h). A bike já roda a 63,6 g/h sem sintoma — o gargalo é a corrida com carga acumulada. Meta da prova: 75–90 g/h de média.</p>
+  </div>
+</section>
+
+<section class="tab" id="treino">
+  <div class="callout c-info"><b>Semana de 19 a 25/10 · escala da assessoria</b>6 sessões + força · carga total ≈ 540 TSS. Semana de construção — hidratação 500–750 ml/h e sódio 400–600 mg/h em todas as sessões longas.</div>
+  <h2>Treinos <span>· 19/10 a 25/10</span></h2>
+  <div class="grid">
+    <div class="card">
+      <h3><span class="dot" style="background:var(--blue)"></span>SEG 19/10 · Força <span class="pill p-tri" style="margin-left:auto">37 TSS</span></h3>
+      <ul class="tl"><li><span class="when">00:50:25</span><span class="what">Musculação / força<small>registrada no Garmin · sono 7h45 · body battery 20–81</small></span></li></ul>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--green)"></span>TER 20/10 · Corrida leve <span class="pill p-tri" style="margin-left:auto">56 TSS</span></h3>
+      <ul class="tl"><li><span class="when">0:50 · 8,2 km</span><span class="what">50' Z1–Z2<small>de preferência na grama ou terra batida, ou em esteira</small></span></li></ul>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--purple,#A855F7)"></span>QUA 21/10 · Bike intervalada <span class="pill p-tri" style="margin-left:auto">116 TSS</span></h3>
+      <ul class="tl"><li><span class="when">2:00</span><span class="what">30' Z1–Z2 · 3× 8' Z3 / 7' Z4 / 5' Z1 · 20' Z2–Z3 · 10' Z1<small>sessão de intensidade → dose conservadora 40–50 g/h (exposição)</small></span></li></ul>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--green)"></span>QUI 22/10 · Corrida tiros <span class="pill p-tri" style="margin-left:auto">59 TSS</span></h3>
+      <ul class="tl"><li><span class="when">1:06 · 9,7 km</span><span class="what">15' Z1–Z2 · 2' intervalo · 5× 800m Z3 (1'30" rec) · 5× 400m Z4 (1'30" rec) · 5' Z1<small>gel com cafeína só se treino for antes das 17h</small></span></li></ul>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--purple,#A855F7)"></span>SEX 23/10 · Bike Z2 <span class="pill p-tri" style="margin-left:auto">77 TSS</span></h3>
+      <ul class="tl"><li><span class="when">1:40</span><span class="what">15' Z1 · 50' Z2 a 85–95 rpm · 20' Z3 · 15' Z1<small>boa janela para exposição a 50–60 g/h</small></span></li></ul>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--teal)"></span>SÁB 24/10 · Natação + Corrida <span class="pill p-tri" style="margin-left:auto">62 TSS</span></h3>
+      <ul class="tl">
+        <li><span class="when">0:40</span><span class="what">40' natação no lago<small>fora do teste intra — exposição é a dieta do dia</small></span></li>
+        <li><span class="when">0:54 · 9,0 km</span><span class="what">3 km Z1–Z2 · 4× (500m Z2 / 500m Z3 / 500m Z1)</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><span class="dot" style="background:var(--purple,#A855F7)"></span>DOM 25/10 · Bike longa + Transição <span class="pill p-tri" style="margin-left:auto">133 TSS</span></h3>
+      <ul class="tl">
+        <li><span class="when">2:00</span><span class="what">25' Z1–Z2 · 1h15 Z2–Z3 · 20' Z1<small>⭐ melhor dia para testar dose nova (bike longa Z2)</small></span></li>
+        <li><span class="when">0:30 · 5,6 km</span><span class="what">Transição: 30' Z2–Z3 logo após a bike</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="tab" id="creditos">
+  <div class="callout c-warn"><b>Como ver seu saldo exato</b>A plataforma não me dá acesso automatizado ao seu saldo de créditos — o registro abaixo mostra onde o consumo está indo. O saldo em tempo real fica no app, nas configurações da conta.</div>
+  <h2>Consumo de créditos <span>· registro do Guzz</span></h2>
+  <div class="grid">
+    <div class="card">
+      <h3>📊 Por projeto</h3>
+      <table>
+        <tr><th>Projeto</th><th>O que consome</th></tr>
+        <tr><td>⚖️ Ação 1</td><td>Procuração, contrato, revisões da petição, verificação de julgados, protocolo</td></tr>
+        <tr><td>⚖️ Ação 2</td><td>Análise da apelação, minuta, reformatação da peça</td></tr>
+        <tr><td>🏊 Gut training</td><td>Briefing arquivado, planos de suplementação, vereditos semanais</td></tr>
+        <tr><td>📱 Insta Jurídico</td><td>Doc mestre (9 págs), 17 templates PNG, Semana 1 completa, QA visual</td></tr>
+        <tr><td>🎬 Memória 70.3</td><td>6 rodadas de personagem (18 artes), 12 cenas do Ep. 1 + 5 do Ep. 2 + 7 slides</td></tr>
+        <tr><td>💰 Finanças</td><td>Plano nov/26–dez/29, análise da planilha, automações mensais</td></tr>
+        <tr><td>🏠 Plano de Vida</td><td>Este dashboard, plano semanal no chat</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h3>💡 O que gasta mais</h3>
+      <ul class="mk">
+        <li><b>Geração de imagens</b> — cada arte do personagem/cena consome créditos (as 6 rodadas do 70.3 foram o maior consumo até agora)</li>
+        <li><b>Documentos longos</b> — petições e relatórios de muitas páginas</li>
+        <li><b>Verificação de julgados</b> — várias buscas web por documento</li>
+      </ul>
+      <p style="color:var(--mut);font-size:12.5px;margin-top:10px">Dica: para economizar, me diga quando um trabalho puder ser mais simples (ex.: sem geração de imagem) — eu adapto o fluxo.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>Gerado pelo Guzz em 20/10/2026 · dados: Google Calendar + briefings dos projetos · peça "meu plano de hoje" no chat para atualizar</footer>
+
+<script>
+  const tabs = document.getElementById('tabs');
+  tabs.addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    tabs.querySelectorAll('button').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    document.querySelectorAll('section.tab').forEach(s => s.classList.remove('active'));
+    document.getElementById(b.dataset.tab).classList.add('active');
+  });
+  const race = new Date('2027-04-18T00:00:00');
+  const d = Math.max(0, Math.ceil((race - new Date()) / 86400000));
+  document.getElementById('days').textContent = d;
+
+  // ---- Botão Concluído (persistente por dia, no navegador do Léo) ----
+  const todayKey = 'pv-done-' + new Date().toISOString().slice(0, 10);
+  let done = {};
+  try { done = JSON.parse(localStorage.getItem(todayKey) || '{}'); } catch (e) { done = {}; }
+
+  function refresh() {
+    const tasks = document.querySelectorAll('.task');
+    let n = 0;
+    tasks.forEach(li => {
+      const id = li.querySelector('.done-btn').dataset.id;
+      const isDone = !!done[id];
+      li.classList.toggle('done', isDone);
+      if (isDone) n++;
+    });
+    document.getElementById('progBar').style.width = (n / tasks.length * 100) + '%';
+    document.getElementById('progTxt').textContent = n + ' de ' + tasks.length + ' concluídas';
+  }
+
+  document.querySelectorAll('.done-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.id;
+      done[id] = !done[id];
+      localStorage.setItem(todayKey, JSON.stringify(done));
+      refresh();
+    });
+  });
+
+  document.getElementById('resetTasks').addEventListener('click', () => {
+    done = {};
+    localStorage.removeItem(todayKey);
+    refresh();
+  });
+
+  // Limpa marcações de dias anteriores (a lista muda todo dia na nova versão)
+  Object.keys(localStorage).filter(k => k.startsWith('pv-done-') && k !== todayKey).forEach(k => localStorage.removeItem(k));
+
+  refresh();
+</script>
+</body>
+</html>
