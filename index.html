@@ -96,6 +96,7 @@
   <button data-tab="gut">📈 Gut Training</button>
   <button data-tab="treino">🏊 Semana de treino</button>
   <button data-tab="creditos">💳 Créditos</button>
+  <button onclick="window.open('financas/','_blank')" style="border-color:#0E9888;color:#0E9888">🔐 Cofre Financeiro</button>
 </nav>
 
 <main>
@@ -168,8 +169,8 @@
     <div class="card mk">
       <div class="mk-head"><h3>📱 Insta Jurídico</h3><small>F1 Fundação · até 17/11</small></div>
       <ul>
-        <li><b>Post 1 publicado ✓</b> (19/10) · story-enquete de ontem postada ✓</li>
-        <li><b>Hoje</b> — publicar o reel da Semana 1</li>
+        <li><b>Post 1 publicado ✓</b> (19/10) · story-enquete de hoje postada ✓</li>
+        <li><b>Qua 21/10</b> — reel da Semana 1 (gravar hoje!)</li>
         <li><b>17/11 · 20h</b> — checkpoint de 30 dias</li>
         <li>Meta do ciclo: 500–1.000 seguidores (baseline: 118)</li>
       </ul>
@@ -195,7 +196,7 @@
     <div class="card mk">
       <div class="mk-head"><h3>⚖️ Contencioso civil — Ação 2</h3><small>reintegração de posse · apelação</small></div>
       <ul>
-        <li>Minuta entregue (19 págs) · <b>revisada por você ✓</b></li>
+        <li>Minuta entregue (19 págs) · <b>revisada por você hoje ✓</b></li>
         <li>Estilo de peças registrado p/ próximas</li>
         <li>Tese de tempestividade pronta</li>
         <li>Pendente: transcrição de vídeos de prova</li>
@@ -342,12 +343,13 @@
 
 </main>
 
-<footer>Gerado pelo Guzz em 21/10/2026 · dados: Google Calendar + briefings dos projetos · peça "meu plano de hoje" no chat para atualizar</footer>
+<footer>Gerado pelo Guzz em 20/10/2026 · dados: Google Calendar + briefings dos projetos · peça "meu plano de hoje" no chat para atualizar</footer>
 
 <script>
   const tabs = document.getElementById('tabs');
   tabs.addEventListener('click', e => {
     const b = e.target.closest('button'); if (!b) return;
+    if (!b.dataset.tab) return; // botão externo (Cofre) não é aba
     tabs.querySelectorAll('button').forEach(x => x.classList.remove('active'));
     b.classList.add('active');
     document.querySelectorAll('section.tab').forEach(s => s.classList.remove('active'));
@@ -390,7 +392,7 @@
     writeCookie('pv_done', payload);
   }
 
-  // Enlance se o usuário abrir uma URL antiga com ?done=... de hoje
+  // Limpeza se o usuário abrir uma URL antiga com ?done=... de hoje
   if (urlDone && location.search.length > 1) {
     try {
       const u = JSON.parse(decodeURIComponent(urlDone));
