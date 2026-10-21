@@ -70,6 +70,7 @@
   .task.done .what{text-decoration:line-through;opacity:.45}
   .task.done .done-btn{background:rgba(34,197,94,.85);color:#0B1220;border-color:var(--green)}
   .task.done .done-btn::before{content:"✓ "}
+  #saveHint{opacity:0;transition:opacity .3s;color:var(--green);font-size:12px;font-weight:700;margin-left:8px}
   svg.chart{width:100%;height:auto;display:block}
   @media (max-width:640px){ .when{flex-basis:74px} .pill{display:none} }
 </style>
@@ -105,7 +106,7 @@
   <div class="card" style="margin-bottom:14px">
     <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px">
       <h3 style="margin:0">✅ Progresso do dia</h3>
-      <span id="progTxt" style="color:var(--mut);font-size:13px">0 de 7 concluídas</span>
+      <span id="progTxt" style="color:var(--mut);font-size:13px">0 de 7 concluídas</span><span id="saveHint">salvo ✓</span>
     </div>
     <div style="background:rgba(255,255,255,.07);border-radius:999px;height:10px;overflow:hidden">
       <div id="progBar" style="height:100%;width:0%;border-radius:999px;background:linear-gradient(90deg,var(--gold),var(--orange));transition:width .3s"></div>
@@ -171,7 +172,7 @@
         <li><b>Qua 21/10</b> — reel da Semana 1 (gravar hoje!)</li>
         <li><b>17/11 · 20h</b> — checkpoint de 30 dias</li>
         <li>Meta do ciclo: 500–1.000 seguidores (baseline: 118)</li>
-      </ul>
+      </+ul>
     </div>
     <div class="card mk">
       <div class="mk-head"><h3>🎬 Memória 70.3</h3><small>@memoriatri</small></div>
@@ -234,6 +235,7 @@
     <svg class="chart" viewBox="0 0 620 270" role="img" aria-label="Gráfico de CHO/h por fase">
       <g font-size="11" fill="#93A0B4">
         <text x="46" y="234" text-anchor="end">0</text>
+        <text x="46" y="184" text-anchor="end">30</text>
         <text x="46" y="184" text-anchor="end">30</text>
         <text x="46" y="134" text-anchor="end">60</text>
         <text x="46" y="84" text-anchor="end">90</text>
@@ -334,7 +336,7 @@
         <li><b>Documentos longos</b> — petições e relatórios de muitas páginas</li>
         <li><b>Verificação de julgados</b> — várias buscas web por documento</li>
       </ul>
-      <p style="color:var(--mut);font-size:12.5px;margin-top:10px">Dica: para economizar, me diga quando um trabalho puder ser mais simples (ex.: sem geração de imagem) — eu adapto o fluxo.</p>
+      <p style="color:var(--mut);font-size:12.5px;margin-top:10px">Dica: para economizar, me diga quando um trabalho puder ser mais simples (ex.: sem geração de reputation de imagem) — eu adapto o fluxo.</p>
     </div>
   </div>
 </section>
@@ -356,10 +358,43 @@
   const d = Math.max(0, Math.ceil((race - new Date()) / 86400000));
   document.getElementById('days').textContent = d;
 
-  // ---- Botão Concluído (persistente por dia, no navegador do Léo) ----
+  // ---- Botão Concluído — persistência TRIPLA (localStorage + cookie 1 ano + ?done= na URL) ----
   const todayKey = 'pv-done-' + new Date().toISOString().slice(0, 10);
   let done = {};
-  try { done = JSON.parse(localStorage.getItem(todayKey) || '{}'); } catch (e) { done = {}; }
+
+  function readCookie(n) {
+    const m = document.cookie.match('(?:^|; )' + n + '=([^;]*)');
+    return m ? decodeURIComponent(m[1]) : null;
+  }
+  function writeCookie(n, v) {
+    const d = new Date(Date.now() + 365 * 86400000);
+    document.cookie = n + '=' + encodeURIComponent(v) + '; expires=' + d.toUTCString() + '; path=/; SameSite=Lax';
+  }
+  const urlDone = new URLSearchParams(location.search).get('done');
+
+  try { const ls = localStorage first; } catch (e) {}
+  if (!Object.keys(done).length) { const ck = readCookie('pv_done'); if (ck) { try { done = JSON.parse(ck); } catch (e) {} } }
+  if (urlDone) {
+    try {
+      const u = JSON.parse(decodeURIComponent(urlDone));
+      if (u.date === new Date().toISOString().slice(0, 10)) {
+        for (const k in u) if (k !== 'date') done[k] = true;
+      }
+    } catch (e) {}
+  }
+
+  function saveDone() {
+    const payload = JSON.stringify(done);
+    try { localStorage.setItem(todayKey, payload); } catch (e) {}
+    writeCookie('pv_done', payload);
+  }
+
+  if (urlDone && location.search.length > 1) {
+    try {
+      const u = JSON.parse(decodeURIComponent(urlDone));
+      if (u.date === new Date().toISOString().slice(0, 10)) history.replaceState(null, '', location.pathname);
+    } catch (e) {}
+  }
 
   function refresh() {
     const tasks = document.querySelectorAll('.task');
@@ -372,26 +407,32 @@
     });
     document.getElementById('progBar').style.width = (n / tasks.length * 100) + '%';
     document.getElementById('progTxt').textContent = n + ' de ' + tasks.length + ' concluídas';
+    const hint = document.getElementById('saveHint');
+    hint.style.opacity = 1;
+    clearTimeout(hhint._t);
+    hint._t = setTimeout(() => hint.style.opacity = 0, 1800);
+  }
+
+  function cleanOldKeys() {
+    Object.keys(localStorage).filter(k => k.startsWith('pv-done-') && k !== todayKey).forEach(k => localStorage.removeItem(k));
   }
 
   document.querySelectorAll('.done-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const id = btn.dataset.id;
       done[id] = !done[id];
-      localStorage.setItem(todayKey, JSON.stringify(done));
+      saveDone();
       refresh();
     });
   });
 
   document.getElementById('resetTasks').addEventListener('click', () => {
     done = {};
-    localStorage.removeItem(todayKey);
+    saveDone();
     refresh();
   });
 
-  // Limpa marcações de dias anteriores (a lista muda todo dia na nova versão)
-  Object.keys(localStorage).filter(k => k.startsWith('pv-done-') && k !== todayKey).forEach(k => localStorage.removeItem(k));
-
+  cleanOldKeys();
   refresh();
 </script>
 </body>
