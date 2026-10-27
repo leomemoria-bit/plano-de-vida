@@ -349,7 +349,7 @@
 
 </main>
 
-<footer>Gerado pelo Guzz em 27/10/2026 (atualizado 20h32) · dados: Google Calendar + briefings dos projetos · peça "meu plano de hoje" no chat para atualizar</footer>
+<footer>Gerado pelo Guzz em 27/10/2026 (atualizado 20h40) · dados: Google Calendar + briefings dos projetos · peça "meu plano de hoje" no chat para atualizar</footer>
 
 <script>
   const tabs = document.getElementById('tabs');
@@ -365,7 +365,13 @@
   document.getElementById('days').textContent = d;
 
   // ---- Botão Concluído — persistência TRIPLA (localStorage + cookie 1 ano + ?done= na URL) ----
-  const todayKey = 'pv-done-' + new Date().toISOString().slice(0, 10);
+  // Data LOCAL (não UTC): em Brasília o UTC vira o dia seguinte às 21h.
+  function hojeLocal() {
+    const d = new Date();
+    return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+  }
+
+  const todayKey = 'pv-done-' + hojeLocal();
   let done = {};
 
   // 1) Cookie (sobrevive a webviews que apagam localStorage; válido 1 ano)
@@ -385,7 +391,7 @@
   if (urlDone) {
     try {
       const u = JSON.parse(decodeURIComponent(urlDone));
-      if (u.date === new Date().toISOString().slice(0, 10)) {
+      if (u.date === hojeLocal()) {
         for (const k in u) if (k !== 'date') done[k] = true;
       }
     } catch (e) {}
@@ -400,7 +406,7 @@
   if (urlDone && location.search.length > 1) {
     try {
       const u = JSON.parse(decodeURIComponent(urlDone));
-      if (u.date === new Date().toISOString().slice(0, 10)) history.replaceState(null, '', location.pathname);
+      if (u.date === hojeLocal()) history.replaceState(null, '', location.pathname);
     } catch (e) {}
   }
 
@@ -434,7 +440,7 @@
         tasks[b.dataset.id] = !!done[b.dataset.id];
         labels[b.dataset.id] = b.dataset.label || b.closest('.task').querySelector('.what').textContent.slice(0, 90);
       });
-      const body = JSON.stringify({ date: new Date().toISOString().slice(0, 10), tasks: tasks, labels: labels });
+      const body = JSON.stringify({ date: hojeLocal(), tasks: tasks, labels: labels });
       try {
         fetch(SYNC_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: body, mode: 'no-cors', keepalive: true }).catch(() => {});
       } catch (e) {}
@@ -464,6 +470,7 @@
 
   cleanOldKeys();
   refresh();
+  syncDone();   // manda o estado atual ao carregar: assim o Guzz enxerga o que já estava marcado
 </script>
 </body>
 </html>
