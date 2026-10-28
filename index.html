@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Plano de Vida — Léo Memória</title>
+<title>Plano de Vida (congelado em 28/10/2026) — Léo Memória</title>
 <style>
   :root{
     --bg:#0B1220; --card:#121B2E; --card2:#0F1728; --line:rgba(255,255,255,.08);
@@ -65,7 +65,7 @@
   .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--mut);margin-top:8px}
   .legend i{width:18px;height:3px;border-radius:2px;display:inline-block;margin-right:6px;vertical-align:middle}
   footer{max-width:1100px;margin:26px auto 0;padding:0 22px;color:var(--mut);font-size:12px}
-  .done-btn{flex:0 0 auto;align-self:center;background:rgba(34,197,94,.12);color:var(--green);border:1px solid rgba(34,197,94,.4);border-radius:8px;padding:5px 12px;font-size:12px;font-weight:700;cursor:pointer}
+  .done-btn{display:none !important;flex:0 0 auto;align-self:center;background:rgba(34,197,94,.12);color:var(--green);border:1px solid rgba(34,197,94,.4);border-radius:8px;padding:5px 12px;font-size:12px;font-weight:700;cursor:pointer}
   .done-btn:hover{background:rgba(34,197,94,.25)}
   .task.done .what{text-decoration:line-through;opacity:.45}
   .task.done .done-btn{background:rgba(34,197,94,.85);color:#0B1220;border-color:var(--green)}
@@ -76,6 +76,16 @@
 </style>
 </head>
 <body>
+
+<div style="background:linear-gradient(90deg,#7A2E2E,#5A2020);border-bottom:2px solid #C0504D;padding:14px 22px;text-align:center">
+  <div style="max-width:1100px;margin:0 auto">
+    <div style="font-weight:700;font-size:15px;color:#FFE8E8;letter-spacing:.02em">🧊 Este painel está CONGELADO · 28/10/2026</div>
+    <div style="font-size:13px;color:#F0C8C8;margin-top:4px;line-height:1.5">
+      O painel oficial agora é o <b>Painel de Vida do Adapta</b>. Este site não é mais atualizado: as tarefas, a agenda e os treinos abaixo ficaram parados em <b>28/10/2026</b> e não refletem mais a realidade.
+      <br>O botão "Concluído" foi desativado. O cofre financeiro continua funcionando e seguro em <a href="financas/" style="color:#FFD9A0;text-decoration:underline">/financas</a>.
+    </div>
+  </div>
+</div>
 
 <header>
   <div class="kicker">Dashboard pessoal</div>
@@ -125,7 +135,7 @@
       <li class="task"><span class="when">Hoje</span><span class="what">🎒 Conferir o estoque do simulado<small>faltam 3 dias: pó (6 porções), 1 gel Dux, sódio · se faltar algo, o dia de comprar é hoje, não sexta</small></span><span class="pill p-tri">Triatlo</span><button class="done-btn" data-id="t12" data-label="Conferir estoque do simulado">Concluído</button></li>
       <li class="task"><span class="when">Depois</span><span class="what">📊 Prints do Garmin/Strava<small>natação e bike de hoje — eu lanço na aba de treino</small></span><span class="pill p-tri">Triatlo</span><button class="done-btn" data-id="t8" data-label="Prints do Garmin/Strava">Concluído</button></li>
     </ul>
-    <div style="margin-top:12px;text-align:right"><button id="resetTasks" style="background:none;border:1px solid var(--line);color:var(--mut);border-radius:8px;padding:5px 12px;font-size:12px;cursor:pointer">↺ Resetar o dia</button></div>
+    <div style="margin-top:12px;text-align:right"><button id="resetTasks" hidden style="background:none;border:1px solid var(--line);color:var(--mut);border-radius:8px;padding:5px 12px;font-size:12px;cursor:pointer">↺ Resetar o dia</button></div>
   </div>
   <div class="callout c-warn" style="margin-top:14px"><b>O simulado é sábado, 6h</b>1500 m + 60 km + 10 km na Vila Planalto. Hoje e amanhã ainda são dias de treino normal (bike de sprints hoje, tiros amanhã); sexta é só giro leve e dormir cedo. Sexta também é o dia de montar o drink da corrida em casa.</div>
 </section>
@@ -350,7 +360,7 @@
 
 </main>
 
-<footer>Gerado pelo Guzz em 28/10/2026 (atualizado 11h10) · dados: Google Calendar + briefings dos projetos · peça "meu plano de hoje" no chat para atualizar</footer>
+<footer>🧊 ARQUIVO HISTÓRICO · congelado pelo Guzz em 28/10/2026 (última versão) · dados: Google Calendar + briefings dos projetos · peça "meu plano de hoje" no chat para atualizar</footer>
 
 <script>
   const tabs = document.getElementById('tabs');
@@ -438,25 +448,9 @@
     hint._t = setTimeout(() => hint.style.opacity = 0, 1800);
   }
 
-  // ---- Registro das marcações para o Guzz conferir (webhook) ----
-  // Requisição "simples": text/plain + no-cors -> não dispara preflight e não polui o console.
-  // Só trafega id de tarefa, booleano e um rótulo curto. Se falhar, nada quebra e nada aparece na tela.
-  const SYNC_URL = 'https://maestro.adapta.one/webhooks/generic/a60d66bad56da609a053fe4f840ce3a94e0e5bb32147a2ebf87e8958d988c087?secret=ea6859545a6db2caea15826c929c7cc5df148a984b2d76fb51c14d5bbd21237f';
-  let syncTimer = null;
-  function syncDone() {
-    clearTimeout(syncTimer);
-    syncTimer = setTimeout(() => {
-      const tasks = {}, labels = {};
-      document.querySelectorAll('.task .done-btn').forEach(b => {
-        tasks[b.dataset.id] = !!done[b.dataset.id];
-        labels[b.dataset.id] = b.dataset.label || b.closest('.task').querySelector('.what').textContent.slice(0, 90);
-      });
-      const body = JSON.stringify({ date: hojeLocal(), tasks: tasks, labels: labels });
-      try {
-        fetch(SYNC_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: body, mode: 'no-cors', keepalive: true }).catch(() => {});
-      } catch (e) {}
-    }, 1200);
-  }
+  // ---- PAINEL CONGELADO em 28/10/2026 ----
+  // O webhook foi apagado e o envio das marcações está desligado. Este arquivo fica como histórico.
+  function syncDone() { /* desativado: painel congelado */ }
 
   function cleanOldKeys() {
     Object.keys(localStorage).filter(k => k.startsWith('pv-done-') && k !== todayKey).forEach(k => localStorage.removeItem(k));
@@ -481,7 +475,7 @@
 
   cleanOldKeys();
   refresh();
-  syncDone();   // manda o estado atual ao carregar: assim o Guzz enxerga o que já estava marcado
+  syncDone();
 </script>
 </body>
 </html>
