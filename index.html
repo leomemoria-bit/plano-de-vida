@@ -350,7 +350,7 @@
 
 </main>
 
-<footer>Gerado pelo Guzz em 28/10/2026 (atualizado 10h55) · dados: Google Calendar + briefings dos projetos · peça "meu plano de hoje" no chat para atualizar</footer>
+<footer>Gerado pelo Guzz em 28/10/2026 (atualizado 11h10) · dados: Google Calendar + briefings dos projetos · peça "meu plano de hoje" no chat para atualizar</footer>
 
 <script>
   const tabs = document.getElementById('tabs');
@@ -388,7 +388,16 @@
   const urlDone = new URLSearchParams(location.search).get('done');
 
   try { const ls = localStorage.getItem(todayKey); if (ls) done = JSON.parse(ls); } catch (e) {}
-  if (!Object.keys(done).length) { const ck = readCookie('pv_done'); if (ck) { try { done = JSON.parse(ck); } catch (e) {} } }
+  // O cookie só vale se for do MESMO dia — senão ele ressuscita as marcações de ontem no dia novo.
+  if (!Object.keys(done).length) {
+    const ck = readCookie('pv_done');
+    if (ck) {
+      try {
+        const c = JSON.parse(ck);
+        if (c && c.date === hojeLocal() && c.done) done = c.done;
+      } catch (e) {}
+    }
+  }
   if (urlDone) {
     try {
       const u = JSON.parse(decodeURIComponent(urlDone));
@@ -401,7 +410,8 @@
   function saveDone() {
     const payload = JSON.stringify(done);
     try { localStorage.setItem(todayKey, payload); } catch (e) {}
-    writeCookie('pv_done', payload);
+    // guarda a data junto: o cookie sobrevive 1 ano, mas só pode valer para o dia em que foi gravado
+    writeCookie('pv_done', JSON.stringify({ date: hojeLocal(), done: done }));
   }
 
   if (urlDone && location.search.length > 1) {
